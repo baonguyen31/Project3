@@ -1,7 +1,10 @@
 package com.javaweb.api.admin;
 
+import com.javaweb.builder.BuildingSearchBuilder;
 import com.javaweb.model.dto.BuildingDTO;
 import com.javaweb.model.dto.UserDTO;
+import com.javaweb.model.request.BuildingSearchRequest;
+import com.javaweb.model.response.BuildingSearchResponse;
 import com.javaweb.model.response.ResponseDTO;
 import com.javaweb.repository.BuildingRepository;
 import com.javaweb.service.AssignmentBuildingService;
@@ -11,6 +14,8 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
+import java.util.Objects;
 
 @RestController
 @RequestMapping(value="/api/building")
@@ -39,6 +44,12 @@ public class BuildingAPI {
         buildingService.deleteByBuidling(ids);
     }
 
+//    @GetMapping("/search")
+//    public List<BuildingSearchResponse> searchBuilding(@RequestParam Map<String, Object> params,
+//                                                       @RequestParam List<String> typeCode) {
+////        BuildingSearchBuilder searchBuilder = buildingService.findAllBuildings(params, typeCode);
+////        return buildingService.findAllBuildings(params, typeCode);
+//    }
     @GetMapping("/{buildingId}/staffs")
     public ResponseDTO loadStaffs(@PathVariable Long buildingId){
         ResponseDTO responseDTO = buildingService.listStaffs(buildingId);

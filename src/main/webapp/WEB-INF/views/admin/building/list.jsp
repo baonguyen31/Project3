@@ -162,11 +162,17 @@
                                                                 </div>
                                                             </div>
                                                         </div>
-                                                        <div class="col-xs-12">
-                                                            <div class="col-xs-6">
+                                                        <div class="col-xs-5">
+                                                            <div class="col-xs-3">
                                                                 <button class="btn btn-xs btn-danger" id="buildingSearchButton">
                                                                     <i class="ace-icon fa fa-search bigger-110"></i>
                                                                     Tìm kiếm
+                                                                </button>
+                                                            </div>
+                                                            <div class="col-xs-2">
+                                                                <button class="btn btn-xs btn-info" type="button" onclick="resetForm()">
+                                                                    <i class="ace-icon fa fa-search bigger-110"></i>
+                                                                    Nhập lại
                                                                 </button>
                                                             </div>
                                                         </div>
@@ -339,6 +345,7 @@
 		 $('#buildingId').val(buildingId)
 
 
+
         }
         $('#assignBuilding').click(function(e){
 				e.preventDefault();
@@ -392,7 +399,34 @@
         $('#buildingSearchButton').click(function(e){
             e.preventDefault();
             $('#listForm').submit();
+
+			<%--let params = $('listForm').serialize()--%>
+
+			<%--$.ajax({--%>
+			<%--	type: "Get",--%>
+			<%--			url: "${buildingAPI}/search?" + params,--%>
+			<%--			// data: param ,--%>
+			<%--			contentType: "application/json",--%>
+			<%--	 		success: function(respond){--%>
+			<%--				var row = '';--%>
+			<%--					$respond.forEach(function(item){--%>
+			<%--						row += '<tr>' +--%>
+			<%--						 '';--%>
+
+
+			<%--					});--%>
+			<%--					$('#tableList tbody').html(row)--%>
+			<%--				console.log("thanh cong!");--%>
+
+			<%--				&lt;%&ndash;window.location.href = "<c:url value="/admin/building-list"/>";&ndash;%&gt;--%>
+			<%--		},--%>
+			<%--			error: function(respond){--%>
+			<%--				console.log("Lỗi rồi!");--%>
+			<%--			}--%>
+			<%--			});--%>
         });
+
+
 	  function deleteBuilding(data){
 	  	var buildingId = [data]
 	  	deleteBuildings(buildingId)
@@ -425,7 +459,15 @@
 	  	$('#assignmentBuildingModel').modal('hide');
 		}
 
+	  function resetForm(){
+		const form = document.getElementById("listForm")
 
+		form.querySelectorAll("input").forEach(it => it.value = "")
+		form.querySelectorAll("input[type=checkbox]").forEach(it => it.checked = false)
+		form.querySelectorAll("select").forEach(it => it.selectedIndex = 0)
+
+		$('#listForm').submit()
+		}
     </script>
 
 </body>

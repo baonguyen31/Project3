@@ -2,7 +2,9 @@ package com.javaweb.controller.admin;
 
 
 
+import com.javaweb.builder.BuildingSearchBuilder;
 import com.javaweb.converter.BuildingConverter;
+import com.javaweb.converter.BuildingSearchBuilderConverter;
 import com.javaweb.entity.BuildingEntity;
 import com.javaweb.enums.buildingType;
 import com.javaweb.enums.district;
@@ -16,10 +18,7 @@ import com.javaweb.service.impl.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpMethod;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
@@ -35,12 +34,20 @@ public class BuildingController {
     @Autowired
     private UserService userService;
 
+    @Autowired
+    private BuildingRepository buildingRepo;
+
+    @Autowired
+    private BuildingSearchBuilderConverter buildingSearchBuilderConverter;
+
     @RequestMapping(value = "/admin/building-list", method = RequestMethod.GET)
-    public ModelAndView buildingList(@ModelAttribute BuildingSearchRequest buidingSearch, HttpServletRequest request){
+    public ModelAndView buildingList(@ModelAttribute BuildingSearchRequest buidingSearch,
+                                     @RequestParam(required = false) List<String> typeCode,
+                                     HttpServletRequest request){
         ModelAndView mav = new ModelAndView("/admin/building/list");
         mav.addObject("modelSearch",buidingSearch);
         //Lấy từ service
-        List<BuildingSearchResponse> responseList = buildingService.getBuildings();
+        List<BuildingSearchResponse> responseList = buildingService.findAllBuildings(buidingSearch,typeCode);
         //Lấy trức tiếp từ reposirory
 //        List<BuildingEntity> listBuilding = buildingRepository.findAll();
 //        List<BuildingSearchResponse> responseList = buildingConverter.convertToDto(listBuilding);

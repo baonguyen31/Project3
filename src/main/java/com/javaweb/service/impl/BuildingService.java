@@ -1,11 +1,14 @@
 package com.javaweb.service.impl;
 
+import com.javaweb.builder.BuildingSearchBuilder;
 import com.javaweb.converter.BuildingConverter;
+import com.javaweb.converter.BuildingSearchBuilderConverter;
 import com.javaweb.entity.AssignmentBuildingEntity;
 import com.javaweb.entity.BuildingEntity;
 import com.javaweb.entity.UserEntity;
 import com.javaweb.model.dto.BuildingDTO;
 import com.javaweb.model.dto.UserDTO;
+import com.javaweb.model.request.BuildingSearchRequest;
 import com.javaweb.model.response.BuildingSearchResponse;
 import com.javaweb.model.response.ResponseDTO;
 import com.javaweb.model.response.StaffResponseDTO;
@@ -23,6 +26,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @Service
@@ -45,6 +49,9 @@ public class BuildingService implements IBuildingService {
 
     @Autowired
     private AssingmentBuildingRepository assingmentBuildingRepo;
+
+    @Autowired
+    private BuildingSearchBuilderConverter buildingSearchBuilderConverter;
 
     @Override
     public List<BuildingSearchResponse> getBuildings() {
@@ -86,6 +93,14 @@ public class BuildingService implements IBuildingService {
             }
         }
         buildingRepo.deleteByIdIn(Id);
+    }
+
+    @Override
+    public List<BuildingSearchResponse> findAllBuildings(BuildingSearchRequest request, List<String> typeCode) {
+        BuildingSearchBuilder builder = buildingSearchBuilderConverter.toBuildingSearchConverter(request,typeCode);
+        List<BuildingEntity> entity = buildingRepo.findAll(builder);
+        List<BuildingSearchResponse> dtoList = buildingConverter.convertToDto(entity);
+        return dtoList;
     }
 
     @Override
