@@ -3,11 +3,13 @@ package com.javaweb.repository.custom;
 import com.javaweb.builder.BuildingSearchBuilder;
 import com.javaweb.entity.BuildingEntity;
 import com.javaweb.model.response.BuildingSearchResponse;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
 
 public interface BuildingRepositoryCustom {
 
-    List<BuildingEntity> findAll(BuildingSearchBuilder builldingSearchbuilder);
+    List<BuildingEntity> findAll(BuildingSearchBuilder builldingSearchbuilder, Pageable pageable);
+    int countTotalItem(BuildingSearchBuilder builldingSearchbuilder);
 }

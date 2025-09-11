@@ -20,8 +20,10 @@ import com.javaweb.service.AssignmentBuildingService;
 import com.javaweb.service.IBuildingService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -60,6 +62,8 @@ public class BuildingService implements IBuildingService {
         return buildings;
     }
 
+
+
     @Override
     @Transactional
     public BuildingDTO insert(BuildingDTO dto) {
@@ -96,11 +100,17 @@ public class BuildingService implements IBuildingService {
     }
 
     @Override
-    public List<BuildingSearchResponse> findAllBuildings(BuildingSearchRequest request, List<String> typeCode) {
+    public List<BuildingSearchResponse> findAllBuildings(BuildingSearchRequest request, Pageable pageable) {
+        List<String> typeCode = request.getTypeCode();
         BuildingSearchBuilder builder = buildingSearchBuilderConverter.toBuildingSearchConverter(request,typeCode);
-        List<BuildingEntity> entity = buildingRepo.findAll(builder);
+        List<BuildingEntity> entity = buildingRepo.findAll(builder, pageable);
         List<BuildingSearchResponse> dtoList = buildingConverter.convertToDto(entity);
         return dtoList;
+    }
+
+    @Override
+    public int countTotalItems(BuildingSearchBuilder builder) {
+        return buildingRepo.countTotalItem(builder);
     }
 
     @Override

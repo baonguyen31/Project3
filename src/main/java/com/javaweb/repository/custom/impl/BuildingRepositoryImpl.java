@@ -3,6 +3,7 @@ package com.javaweb.repository.custom.impl;
 import com.javaweb.builder.BuildingSearchBuilder;
 import com.javaweb.entity.BuildingEntity;
 import com.javaweb.repository.custom.BuildingRepositoryCustom;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
@@ -104,58 +105,41 @@ public class BuildingRepositoryImpl implements BuildingRepositoryCustom{
 
     }
     @Override
-    public List<BuildingEntity> findAll(BuildingSearchBuilder builldingSearchbuilder) {
+    public List<BuildingEntity> findAll(BuildingSearchBuilder builldingSearchbuilder, Pageable pageable) {
 
-        StringBuilder sql = new StringBuilder("SELECT DISTINCT b.*"
-                + " FROM building b ");
+        StringBuilder sql = new StringBuilder(buildQueryFilter());
         joinTable(builldingSearchbuilder, sql);
 
-        StringBuilder where = new StringBuilder(" where 1= 1 ");
+        StringBuilder where = new StringBuilder(" where 1 = 1 ");
         queryNormal(builldingSearchbuilder, where);
         querySpecial(builldingSearchbuilder, where);
+        where.append(" GROUP BY b.id ");
+        where.append(" LIMIT ").append(pageable.getPageSize()).append("\n")
+                .append(" OFFSET ").append(pageable.getOffset());
         sql.append(where);
 
-        where.append(" GROUP BY b.id ");
         Query query = entityManager.createNativeQuery(sql.toString(), BuildingEntity.class);
         return query.getResultList();
 
-
-
-//		List<BuildingEntity> result = new ArrayList<>();
-//	    System.out.println("SQL: " + sql.toString());
-//
-//	   try (Connection connection = DriverManager.getConnection(URL, username, password);
-//	             Statement statement = connection.createStatement();
-//	             ResultSet rs = statement.executeQuery(sql.toString())) { // Thay your_table bằng tên bảng của bạn
-//
-//	            while (rs.next()) {
-//	                // Xử lý dữ liệu từ ResultSet
-//	            	BuildingEntity buildingEntity = new BuildingEntity();
-//	            	buildingEntity.setId(rs.getLong("id"));
-//	            	buildingEntity.setName(rs.getString("name"));
-//	            	buildingEntity.setNumberOfBasement(rs.getLong("numberofbasement"));
-//	            	buildingEntity.setStreet(rs.getString("street"));
-//	            	buildingEntity.setWard(rs.getString("ward"));
-////	            	buildingEntity.setDistrict(rs.getLong("districtid"));
-//	            	buildingEntity.setFloorarea(rs.getLong("floorarea"));
-//	            	buildingEntity.setRentprice(rs.getLong("rentprice"));
-////	            	String values = rs.getString("value");
-////	            	buildingEntity.setListRent(values);
-////	            	buildingEntity.setRentArea(rs.getLong("rentarea"));
-//	            	buildingEntity.setRentpricedescription(rs.getString("rentpricedescription"));
-//	            	buildingEntity.setManagername(rs.getString("managername"));
-//	            	buildingEntity.setManagerphonenumber(rs.getString("managerphonenumber"));
-//	            	result.add(buildingEntity);
-//
-//	        }
-//
-//	   		}	catch (SQLException e) {
-//	            System.err.println("Lỗi kết nối hoặc truy vấn: " + e.getMessage());
-//	            e.printStackTrace();
-//	        }
-//	   return result;
     }
 
+    @Override
+    public int countTotalItem(BuildingSearchBuilder builldingSearchbuilder) {
+        StringBuilder sql = new StringBuilder(buildQueryFilter());
+        joinTable(builldingSearchbuilder, sql);
 
+        StringBuilder where = new StringBuilder(" where 1 = 1 ");
+        queryNormal(builldingSearchbuilder, where);
+        querySpecial(builldingSearchbuilder, where);
+        where.append(" GROUP BY b.id ");
+        sql.append(where);
 
+        Query query = entityManager.createNativeQuery(sql.toString(), BuildingEntity.class);
+        return query.getResultList().size();
+    }
+
+    private String buildQueryFilter() {
+        String sql = "SELECT DISTINCT b.* FROM building b ";
+        return sql;
+    }
 }

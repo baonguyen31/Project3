@@ -3,6 +3,7 @@ package com.javaweb.controller.admin;
 
 
 import com.javaweb.builder.BuildingSearchBuilder;
+import com.javaweb.constant.SystemConstant;
 import com.javaweb.converter.BuildingConverter;
 import com.javaweb.converter.BuildingSearchBuilderConverter;
 import com.javaweb.entity.BuildingEntity;
@@ -15,7 +16,9 @@ import com.javaweb.repository.BuildingRepository;
 import com.javaweb.repository.custom.impl.BuildingRepositoryImpl;
 import com.javaweb.service.impl.BuildingService;
 import com.javaweb.service.impl.UserService;
+import com.javaweb.utils.DisplayTagUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpMethod;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -41,32 +44,19 @@ public class BuildingController {
     private BuildingSearchBuilderConverter buildingSearchBuilderConverter;
 
     @RequestMapping(value = "/admin/building-list", method = RequestMethod.GET)
-    public ModelAndView buildingList(@ModelAttribute BuildingSearchRequest buidingSearch,
-                                     @RequestParam(required = false) List<String> typeCode,
+    public ModelAndView buildingList(@ModelAttribute(SystemConstant.MODEL)  BuildingSearchRequest buidingSearch,
                                      HttpServletRequest request){
         ModelAndView mav = new ModelAndView("/admin/building/list");
+        DisplayTagUtils.of(request, buidingSearch);
         mav.addObject("modelSearch",buidingSearch);
         //Lấy từ service
-        List<BuildingSearchResponse> responseList = buildingService.findAllBuildings(buidingSearch,typeCode);
-        //Lấy trức tiếp từ reposirory
-//        List<BuildingEntity> listBuilding = buildingRepository.findAll();
-//        List<BuildingSearchResponse> responseList = buildingConverter.convertToDto(listBuilding);
-        //Gán cứng dữ liệu
-//        BuildingSearchResponse item = new BuildingSearchResponse();
-//        item.setId(5L);
-//        item.setName("Tòa nhà");
-//        item.setAddress("123,PVH");
-//        item.setNumberOfBasement(3L);
-//        item.setManagerName("Hào");
-//        item.setManagerPhone("09854321");
-//        item.setFloorArea(123L);
-//        item.setEmptyArea("");
-//        item.setRentArea("123");
-//        item.setBrokerageFee(12.1);
-//        responseList.add(item);
-//        System.out.println("List building: " + responseList.size());
-//        responseList.forEach(b -> System.out.println(b.getRentArea()));
-        mav.addObject("buildingList", responseList);
+        List<String> typeCode = buidingSearch.getTypeCode();
+        List<BuildingSearchResponse> responseList = buildingService.findAllBuildings(buidingSearch, PageRequest.of(buidingSearch.getPage() - 1, buidingSearch.getMaxPageItems()));
+        BuildingSearchBuilder builder = buildingSearchBuilderConverter.toBuildingSearchConverter(buidingSearch, typeCode);
+        int total = buildingService.countTotalItems(builder);
+        buidingSearch.setTotalItems(total);
+        buidingSearch.setListResult(responseList);
+        mav.addObject(SystemConstant.MODEL, buidingSearch);
         mav.addObject("listStaffs", userService.getStaffs());
         mav.addObject("districtList", district.type());
         mav.addObject("typeCode", buildingType.type());

@@ -9,6 +9,7 @@ import com.javaweb.model.dto.UserDTO;
 import com.javaweb.model.request.BuildingSearchRequest;
 import com.javaweb.model.response.BuildingSearchResponse;
 import com.javaweb.model.response.ResponseDTO;
+import org.springframework.data.domain.Pageable;
 
 public interface IBuildingService {
     List<BuildingSearchResponse> getBuildings();
@@ -18,6 +19,6 @@ public interface IBuildingService {
     BuildingDTO update(BuildingDTO dto, Long Id);
     void deleteByBuidling(List<Long> Id);
 //    List<BuildingSearchResponse> findAllBuildings(Map<String, Object> params, List<String> typeCode);
-    List<BuildingSearchResponse> findAllBuildings(BuildingSearchRequest request, List<String> typeCode);
-
+    List<BuildingSearchResponse> findAllBuildings(BuildingSearchRequest request, Pageable pageable);
+    int countTotalItems(BuildingSearchBuilder builder);
 }

@@ -208,55 +208,38 @@
 						</div><!-- /.col -->
 						</div><!-- /.row -->
 						<!-- Bảng danh sách tòa nhà -->
+					<form:form modelAttribute="model" action="${buildingURLValue}" id="tableList" method="GET">
 						<div class="row"  style="margin: 3em 0 1.5em;">
 						 <div class="col-xs-12">
-										<table id="tableList" class="table table-striped table-bordered table-hover">
-											<thead>
-												<tr>
-													<th class="center">
-														<label class="pos-rel">
-															<input type="checkbox" class="ace">
-															<span class="lbl"></span>
-														</label>
-													</th>
-													<th>Tên tòa nhà</th>
-													<th>Địa chỉ</th>
-													<th>Số tầng hầm</th>
-													<th>Tên quản lý</th>
-													<th>Số điện thoại</th>
-													<th>Diện tích sàn</th>
-													<th>Diện tích trống</th>
-													<th>Diện tích thuê</th>
-													<th>Phí môi giới</th>
-													<th >Thao tác</th>
-
-												</tr>
-											</thead>
-
-											<tbody>
-											<c:forEach var="item" items="${buildingList}">
-
-												<tr>
-													<td class="center">
-														<label class="pos-rel">
-															<input type="checkbox" class="ace" name="checkList" value="${item.id}">
-															<span class="lbl"></span>
-														</label>
-													</td>
-
-													<td>${item.name}</td>
-													<td>${item.address}</td>
-													<td>${item.numberOfBasement}</td>
-													<td>${item.managerName}</td>
-													<td>${item.managerPhone }</td>
-													<td>${item.floorArea}</td>
-													<td>${item.emptyArea}</td>
-													<td>${item.rentArea}</td>
-													<td>${item.brokerageFee}</td>
-
-                                                    <td><sp></sp></td>
-													<td>
-														<div class="hidden-sm hidden-xs btn-group">
+						 	<div class="table-responsive">
+						 		<display:table  name="model.listResult" cellspacing="0" cellpadding="0"
+                                                   requestURI="${buildingURLValue}" partialList="true" sort="external"
+                                                   size="${model.totalItems}" defaultsort="2" defaultorder="ascending"
+                                                   id="tableList" pagesize="${model.maxPageItems}"
+                                                   export="false"
+                                                   class="table table-fcv-ace table-striped table-bordered table-hover dataTable no-footer"
+                                                   style="margin: 3em 0 1.5em;">
+                                          <display:column title="<fieldset class='form-group'>
+												        <input type='checkbox' id='checkAll' class='check-box-element'>
+												        </fieldset>" class="center select-cell"
+                                                        headerClass="center select-cell">
+                                                    <fieldset>
+                                                <input type="checkbox" name="checkList" value="${tableList.id}"
+                                                       id="checkbox_${tableList.id}" class="check-box-element"/>
+                                            </fieldset>
+                                            </display:column>
+                                            <display:column headerClass="text-center" property="name" title="Tên tòa nhà"/>
+                                             <display:column headerClass="text-center" property="address" title="Địa chỉ"/>
+                                             <display:column headerClass="text-center" property="numberOfBasement" title="Số tầng hầm"/>
+											 <display:column headerClass="text-center" property="managerName" title="Tên quản lý"/>
+											 <display:column headerClass="text-center" property="managerPhone" title="Số quản lý "/>
+											 <display:column headerClass="text-center" property="floorArea" title="Diện tích sàn"/>
+											 <display:column headerClass="text-center" property="emptyArea" title="Diện tích trống"/>
+											 <display:column headerClass="text-center" property="rentPrice" title="Giá thuê"/>
+											 <display:column headerClass="text-center" property="serviceFee" title="Phí dịch vụ "/>
+											 <display:column headerClass="text-center" property="brokerageFee" title="Phí môi giới"/>
+											 <display:column headerClass="col-actions" title="Thao tác">
+											    <div class="hidden-sm hidden-xs btn-group">
 															<button class="btn btn-xs btn-success" title="Giao tòa nhà" onclick="assignmentBuilding(${item.id})">
 																<i class="ace-icon glyphicon glyphicon-list"></i>
 															</button>
@@ -269,11 +252,77 @@
 																<i class="ace-icon fa fa-trash-o bigger-120"></i>
 															</button>
                                                         </div>
-												</tr>
+                                                        </display:column>
+                                      </display:table>
 
-                                               </c:forEach>
-											</tbody>
-										</table>
+						 	</div>
+						 	</div>
+						 	</div>
+						 	</form:form>
+<%--										<table id="tableList" class="table table-striped table-bordered table-hover">--%>
+<%--											<thead>--%>
+<%--												<tr>--%>
+<%--													<th class="center">--%>
+<%--														<label class="pos-rel">--%>
+<%--															<input type="checkbox" class="ace">--%>
+<%--															<span class="lbl"></span>--%>
+<%--														</label>--%>
+<%--													</th>--%>
+<%--													<th>Tên tòa nhà</th>--%>
+<%--													<th>Địa chỉ</th>--%>
+<%--													<th>Số tầng hầm</th>--%>
+<%--													<th>Tên quản lý</th>--%>
+<%--													<th>Số điện thoại</th>--%>
+<%--													<th>Diện tích sàn</th>--%>
+<%--													<th>Diện tích trống</th>--%>
+<%--													<th>Diện tích thuê</th>--%>
+<%--													<th>Phí môi giới</th>--%>
+<%--													<th >Thao tác</th>--%>
+
+<%--												</tr>--%>
+<%--											</thead>--%>
+
+<%--											<tbody>--%>
+<%--											<c:forEach var="item" items="${buildingList}">--%>
+
+<%--												<tr>--%>
+<%--													<td class="center">--%>
+<%--														<label class="pos-rel">--%>
+<%--															<input type="checkbox" class="ace" name="checkList" value="${item.id}">--%>
+<%--															<span class="lbl"></span>--%>
+<%--														</label>--%>
+<%--													</td>--%>
+
+<%--													<td>${item.name}</td>--%>
+<%--													<td>${item.address}</td>--%>
+<%--													<td>${item.numberOfBasement}</td>--%>
+<%--													<td>${item.managerName}</td>--%>
+<%--													<td>${item.managerPhone }</td>--%>
+<%--													<td>${item.floorArea}</td>--%>
+<%--													<td>${item.emptyArea}</td>--%>
+<%--													<td>${item.rentArea}</td>--%>
+<%--													<td>${item.brokerageFee}</td>--%>
+
+<%--                                                    <td><sp></sp></td>--%>
+<%--													<td>--%>
+<%--														<div class="hidden-sm hidden-xs btn-group">--%>
+<%--															<button class="btn btn-xs btn-success" title="Giao tòa nhà" onclick="assignmentBuilding(${item.id})">--%>
+<%--																<i class="ace-icon glyphicon glyphicon-list"></i>--%>
+<%--															</button>--%>
+
+<%--															<a class="btn btn-xs btn-info" title="Sửa tòa nhà" href="${buildingEditURL}-${item.id}">--%>
+<%--																<i class="ace-icon fa fa-pencil bigger-120"></i>--%>
+<%--															</a>--%>
+
+<%--															<button class="btn btn-xs btn-danger" title="Xóa tòa nhà" onclick="deleteBuilding(${item.id})">--%>
+<%--																<i class="ace-icon fa fa-trash-o bigger-120"></i>--%>
+<%--															</button>--%>
+<%--                                                        </div>--%>
+<%--												</tr>--%>
+
+<%--                                               </c:forEach>--%>
+<%--											</tbody>--%>
+<%--										</table>--%>
 									</div>
 
 						</div><!-- /.row -->
