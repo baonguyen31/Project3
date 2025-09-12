@@ -53,8 +53,7 @@ public class BuildingController {
         List<String> typeCode = buidingSearch.getTypeCode();
         List<BuildingSearchResponse> responseList = buildingService.findAllBuildings(buidingSearch, PageRequest.of(buidingSearch.getPage() - 1, buidingSearch.getMaxPageItems()));
         BuildingSearchBuilder builder = buildingSearchBuilderConverter.toBuildingSearchConverter(buidingSearch, typeCode);
-        int total = buildingService.countTotalItems(builder);
-        buidingSearch.setTotalItems(total);
+        buidingSearch.setTotalItems(buildingService.countTotalItems(builder));
         buidingSearch.setListResult(responseList);
         mav.addObject(SystemConstant.MODEL, buidingSearch);
         mav.addObject("listStaffs", userService.getStaffs());

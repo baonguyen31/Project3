@@ -44,12 +44,6 @@ public class BuildingService implements IBuildingService {
     private UserRepository userRepo;
 
     @Autowired
-    private ModelMapper modelMapper;
-
-    @Autowired
-    private AssignmentBuildingService assignmentBuildingService;
-
-    @Autowired
     private AssingmentBuildingRepository assingmentBuildingRepo;
 
     @Autowired
