@@ -67,7 +67,7 @@ public class BuildingEntity extends BaseEntity {
         this.rentPriceDescription = rentPriceDescription;
     }
 
-    @OneToMany(mappedBy = "building", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "building", fetch = FetchType.LAZY)
     private List<RentAreaEntity> rentArea = new ArrayList<>();
 
     @OneToMany(mappedBy = "building", fetch = FetchType.EAGER)

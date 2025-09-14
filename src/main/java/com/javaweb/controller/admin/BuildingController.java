@@ -50,10 +50,10 @@ public class BuildingController {
         DisplayTagUtils.of(request, buidingSearch);
         mav.addObject("modelSearch",buidingSearch);
         //Lấy từ service
-        List<String> typeCode = buidingSearch.getTypeCode();
+//        List<String> typeCode = buidingSearch.getTypeCode();
         List<BuildingSearchResponse> responseList = buildingService.findAllBuildings(buidingSearch, PageRequest.of(buidingSearch.getPage() - 1, buidingSearch.getMaxPageItems()));
-        BuildingSearchBuilder builder = buildingSearchBuilderConverter.toBuildingSearchConverter(buidingSearch, typeCode);
-        buidingSearch.setTotalItems(buildingService.countTotalItems(builder));
+//        BuildingSearchBuilder builder = buildingSearchBuilderConverter.toBuildingSearchConverter(buidingSearch, typeCode);
+        buidingSearch.setTotalItems(buildingService.countTotalItems(buidingSearch));
         buidingSearch.setListResult(responseList);
         mav.addObject(SystemConstant.MODEL, buidingSearch);
         mav.addObject("listStaffs", userService.getStaffs());
@@ -74,7 +74,6 @@ public class BuildingController {
     public ModelAndView buildingEdit(@PathVariable ("id") Long Id){
         ModelAndView mav = new ModelAndView("/admin/building/edit");
         BuildingDTO buildingDTO = buildingService.findById(Id);
-        buildingDTO.setId(Id);
         mav.addObject("buildingEdit",buildingDTO);
         mav.addObject("districtList", district.type());
         mav.addObject("typeCode", buildingType.type());

@@ -10,6 +10,7 @@ import com.javaweb.repository.BuildingRepository;
 import com.javaweb.service.AssignmentBuildingService;
 import com.javaweb.service.impl.BuildingService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
@@ -30,12 +31,8 @@ public class BuildingAPI {
     private BuildingRepository buildingRepository;
 
     @PostMapping
-    public BuildingDTO addAndUpdateBuilding(@RequestBody BuildingDTO dto){
-        if (dto.getId() != null){
-            return buildingService.update(dto, dto.getId());
-        }else {
-            return buildingService.insert(dto);
-        }
+    public ResponseEntity<BuildingDTO> addAndUpdateBuilding(@RequestBody BuildingDTO dto){
+        return ResponseEntity.ok(buildingService.addAndUpdate(dto));
 //        return dto;
     }
 

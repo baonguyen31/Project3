@@ -1,12 +1,12 @@
 package com.javaweb.repository;
 
-import com.javaweb.entity.AssignmentBuildingEntity;
 import com.javaweb.entity.BuildingEntity;
+import com.javaweb.entity.RentAreaEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
 
-public interface AssingmentBuildingRepository extends JpaRepository<AssignmentBuildingEntity, Long> {
+public interface rentAreaRepository extends JpaRepository<RentAreaEntity, Long> {
+    void deleteByBuilding(BuildingEntity buildingEntity);
     void deleteByBuildingIdIn(List<Long> ids);
-    void deleteByBuilding(Long id);
 }

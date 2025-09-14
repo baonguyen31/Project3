@@ -39,7 +39,7 @@ public class AssignmentBuildingServiceImpl implements AssignmentBuildingService 
     public void assignStafftoBuilding(Long buildingId, List<Long> staffId) {
         BuildingEntity buildingEntity = buildingRepository.findById(buildingId).get();
 //        BuildingDTO building = buildingConverter.ToDto(buildingEntity);
-        assingmentBuildingRepository.deleteAssignmentBuildingEntityByBuildingId(buildingId);
+        assingmentBuildingRepository.deleteByBuilding(buildingId);
         for(Long id : staffId) {
             UserEntity userEntity = userRepository.findOneById(id);
             AssignmentBuildingEntity assign = new AssignmentBuildingEntity();
@@ -49,5 +49,10 @@ public class AssignmentBuildingServiceImpl implements AssignmentBuildingService 
             assign.setStaff(userEntity);
             assingmentBuildingRepository.save(assign);
         }
+    }
+
+    @Override
+    public void deleteByBuildingIds(List<Long> Id) {
+        assingmentBuildingRepository.deleteByBuildingIdIn(Id);
     }
 }

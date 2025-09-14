@@ -14,11 +14,11 @@ import org.springframework.data.domain.Pageable;
 public interface IBuildingService {
     List<BuildingSearchResponse> getBuildings();
     ResponseDTO listStaffs(Long buildingId);
-    BuildingDTO insert(BuildingDTO dto);
+    BuildingDTO addAndUpdate(BuildingDTO dto);
     BuildingDTO findById(Long Id);
-    BuildingDTO update(BuildingDTO dto, Long Id);
+//    BuildingDTO update(BuildingDTO dto, Long Id);
     void deleteByBuidling(List<Long> Id);
 //    List<BuildingSearchResponse> findAllBuildings(Map<String, Object> params, List<String> typeCode);
     List<BuildingSearchResponse> findAllBuildings(BuildingSearchRequest request, Pageable pageable);
-    int countTotalItems(BuildingSearchBuilder builder);
+    int countTotalItems(BuildingSearchRequest request);
 }

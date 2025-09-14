@@ -240,15 +240,15 @@
 											 <display:column headerClass="text-center" property="brokerageFee" title="Phí môi giới"/>
 											 <display:column headerClass="col-actions" title="Thao tác">
 											    <div class="hidden-sm hidden-xs btn-group">
-															<button class="btn btn-xs btn-success" title="Giao tòa nhà" onclick="assignmentBuilding(${item.id})">
+															<button class="btn btn-xs btn-success" title="Giao tòa nhà" onclick="assignmentBuilding(${tableList.id})">
 																<i class="ace-icon glyphicon glyphicon-list"></i>
 															</button>
 
-															<a class="btn btn-xs btn-info" title="Sửa tòa nhà" href="${buildingEditURL}-${item.id}">
+															<a class="btn btn-xs btn-info" title="Sửa tòa nhà" href="${buildingEditURL}-${tableList.id}">
 																<i class="ace-icon fa fa-pencil bigger-120"></i>
 															</a>
 
-															<button class="btn btn-xs btn-danger" title="Xóa tòa nhà" onclick="deleteBuilding(${item.id})">
+															<button class="btn btn-xs btn-danger" title="Xóa tòa nhà" onclick="deleteBuilding(${tableList.id})">
 																<i class="ace-icon fa fa-trash-o bigger-120"></i>
 															</button>
                                                         </div>

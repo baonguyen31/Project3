@@ -43,7 +43,7 @@
                                         <div class="form-group">
                                             <label class="col-xs-3">Tên tòa nhà</label>
                                             <div class="col-xs-9">
-                                                <input type="text" class="form-control" id="name" name="name" placeholder="Tên tòa nhà" value="${buildingEdit.name}"/>
+                                                <input type="text" class="form-control" id="name" name="name" placeholder="Tên tòa nhà" value="${buildingEdit.name}" />
                                             </div>
                                         </div>
                                         <div class="form-group">
@@ -276,7 +276,15 @@
 
 					})
                      data['typeCode'] = typeCode;
-                    addOrEditButton(data)
+                    if(typeCode == ''){
+                        window.location.href = "/admin/building-edit?typeCode=required"
+                    }
+                    else if(data['name'] == ''){
+                    window.location.href = "/admin/building-edit?name=required"
+                    }
+                    else{
+                     addOrEditButton(data)
+                    }
 			})
             function addOrEditButton(data){
                 $.ajax({
@@ -285,9 +293,11 @@
 						data: JSON.stringify(data),
 						contentType: "application/json",
 				 		success: function(respond){
+                            alert("Thành công")
+                            window.location.href = "/admin/building-list"
 							console.log("thanh cong!");
 					},
-						error: function(respond){
+						error: function(){
 							console.log("Lỗi rồi!");
 						}
 						})

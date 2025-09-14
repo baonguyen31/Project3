@@ -16,8 +16,11 @@ import com.javaweb.repository.AssingmentBuildingRepository;
 import com.javaweb.repository.BuildingRepository;
 import com.javaweb.repository.UserRepository;
 import com.javaweb.repository.custom.impl.BuildingRepositoryImpl;
+import com.javaweb.repository.rentAreaRepository;
 import com.javaweb.service.AssignmentBuildingService;
 import com.javaweb.service.IBuildingService;
+import com.javaweb.utils.StringUtils;
+import org.apache.tomcat.util.codec.binary.Base64;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
@@ -25,6 +28,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -44,10 +48,17 @@ public class BuildingService implements IBuildingService {
     private UserRepository userRepo;
 
     @Autowired
-    private AssingmentBuildingRepository assingmentBuildingRepo;
-
+    private AssignmentBuildingService assignmentBuildingService;
     @Autowired
     private BuildingSearchBuilderConverter buildingSearchBuilderConverter;
+
+    @Autowired
+    private rentAreaRepository rentAreaRepo;
+
+    @Autowired
+    private ModelMapper modelMapper;
+    @Autowired
+    private RentAreaService rentAreaService;
 
     @Override
     public List<BuildingSearchResponse> getBuildings() {
@@ -60,13 +71,30 @@ public class BuildingService implements IBuildingService {
 
     @Override
     @Transactional
-    public BuildingDTO insert(BuildingDTO dto) {
-        BuildingEntity savedEntity2 = buildingConverter.convertToEntity(dto);
-        BuildingEntity savedEntity = buildingRepo.save(savedEntity2);
-//        BuildingEntity entity = modelMapper.map(dto, BuildingEntity.class);
-//        BuildingDTO result = buildingConverter.ToDto(savedEntity);
-        return buildingConverter.ToDto(savedEntity);
+    public BuildingDTO addAndUpdate(BuildingDTO dto) {
+        Long id = dto.getId();
+        BuildingEntity buildingEntity = modelMapper.map(dto, BuildingEntity.class);
+        buildingEntity.setTypeCode(removeAccent(dto.getTypeCode()));
+        buildingRepo.save(buildingEntity);
+        if(StringUtils.check(dto.getRentArea())) rentAreaService.addRentArea(dto);
+        return dto;
     }
+
+//    private void saveThumbnail(BuildingDTO buildingDTO, BuildingEntity buildingEntity) {
+//        String path = "/building/" + buildingDTO.getImageName();
+//        if (null != buildingDTO.getImageBase64()) {
+//            if (null != buildingEntity.getImage()) {
+//                if (!path.equals(buildingEntity.getImage())) {
+//                    File file = new File("C:/home/office" + buildingEntity.getImage());
+//                    file.delete();
+//                }
+//            }
+//            byte[] bytes = Base64.decodeBase64(buildingDTO.getImageBase64().getBytes());
+//            uploadFileUtils.writeOrUpdate(path, bytes);
+//            buildingEntity.setImage(path);
+//        }
+//    }
+
 
     @Override
     public BuildingDTO findById(Long Id) {
@@ -75,21 +103,20 @@ public class BuildingService implements IBuildingService {
         return dto;
     }
 
-    @Override
-    public BuildingDTO update(BuildingDTO dto, Long Id) {
-//        BuildingEntity findbyid = buildingRepo.findById(Id).get();
-        BuildingEntity savedEntity = buildingRepo.save(buildingConverter.convertToEntity(dto));
-        return buildingConverter.ToDto(savedEntity);
-    }
+//    @Override
+//    @Transactional
+//    public BuildingDTO update(BuildingDTO dto, Long Id) {
+//        BuildingEntity building = buildingConverter.convertToEntity(dto);
+//        rentAreaRepo.deleteRentAreaEntityByBuilding_Id(Id);
+//        BuildingEntity savedEntity = buildingRepo.save(building);
+//        return buildingConverter.ToDto(savedEntity);
+//    }
 
     @Override
     @Transactional
     public void deleteByBuidling(List<Long> Id) {
-        for(Long buildingId: Id){
-            if(assingmentBuildingRepo.existsById(buildingId)){
-                assingmentBuildingRepo.deleteAssignmentBuildingEntityByBuildingId(buildingId);
-            }
-        }
+        rentAreaService.deleteByBuildingIdIn(Id);
+        assignmentBuildingService.deleteByBuildingIds(Id);
         buildingRepo.deleteByIdIn(Id);
     }
 
@@ -98,12 +125,14 @@ public class BuildingService implements IBuildingService {
         List<String> typeCode = request.getTypeCode();
         BuildingSearchBuilder builder = buildingSearchBuilderConverter.toBuildingSearchConverter(request,typeCode);
         List<BuildingEntity> entity = buildingRepo.findAll(builder, pageable);
-        List<BuildingSearchResponse> dtoList = buildingConverter.convertToDto(entity);
-        return dtoList;
+//        List<BuildingSearchResponse> dtoList = buildingConverter.convertToDto(entity);
+        return  buildingConverter.convertToDto(entity);
     }
 
     @Override
-    public int countTotalItems(BuildingSearchBuilder builder) {
+    public int countTotalItems(BuildingSearchRequest request) {
+        List<String> typeCode = request.getTypeCode();
+        BuildingSearchBuilder builder = buildingSearchBuilderConverter.toBuildingSearchConverter(request, typeCode);
         return buildingRepo.countTotalItem(builder);
     }
 
@@ -128,6 +157,11 @@ public class BuildingService implements IBuildingService {
         }
         responseDTO.setData(responseDTOs);
         return responseDTO;
+    }
+
+    public String removeAccent(List<String> typeCodes) {
+        String result = String.join(",", typeCodes);
+        return result;
     }
 
 

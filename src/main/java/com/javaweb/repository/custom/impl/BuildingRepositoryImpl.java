@@ -2,6 +2,7 @@ package com.javaweb.repository.custom.impl;
 
 import com.javaweb.builder.BuildingSearchBuilder;
 import com.javaweb.entity.BuildingEntity;
+import com.javaweb.model.response.BuildingSearchResponse;
 import com.javaweb.repository.custom.BuildingRepositoryCustom;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
@@ -106,18 +107,11 @@ public class BuildingRepositoryImpl implements BuildingRepositoryCustom{
     }
     @Override
     public List<BuildingEntity> findAll(BuildingSearchBuilder builldingSearchbuilder, Pageable pageable) {
-
-        StringBuilder sql = new StringBuilder(buildQueryFilter());
-        joinTable(builldingSearchbuilder, sql);
-
-        StringBuilder where = new StringBuilder(" where 1 = 1 ");
-        queryNormal(builldingSearchbuilder, where);
-        querySpecial(builldingSearchbuilder, where);
-        where.append(" GROUP BY b.id ");
+        StringBuilder sql = new StringBuilder(buildQueryFilter(builldingSearchbuilder));
+        StringBuilder where = new StringBuilder();
         where.append(" LIMIT ").append(pageable.getPageSize()).append("\n")
                 .append(" OFFSET ").append(pageable.getOffset());
         sql.append(where);
-
         Query query = entityManager.createNativeQuery(sql.toString(), BuildingEntity.class);
         return query.getResultList();
 
@@ -125,7 +119,13 @@ public class BuildingRepositoryImpl implements BuildingRepositoryCustom{
 
     @Override
     public int countTotalItem(BuildingSearchBuilder builldingSearchbuilder) {
-        StringBuilder sql = new StringBuilder(buildQueryFilter());
+        String sql = buildQueryFilter(builldingSearchbuilder);
+        Query query = entityManager.createNativeQuery(sql.toString(), BuildingEntity.class);
+        return query.getResultList().size();
+    }
+
+    private String buildQueryFilter(BuildingSearchBuilder builldingSearchbuilder) {
+        StringBuilder sql = new StringBuilder("SELECT DISTINCT b.* FROM building b ");
         joinTable(builldingSearchbuilder, sql);
 
         StringBuilder where = new StringBuilder(" where 1 = 1 ");
@@ -133,13 +133,6 @@ public class BuildingRepositoryImpl implements BuildingRepositoryCustom{
         querySpecial(builldingSearchbuilder, where);
         where.append(" GROUP BY b.id ");
         sql.append(where);
-
-        Query query = entityManager.createNativeQuery(sql.toString(), BuildingEntity.class);
-        return query.getResultList().size();
-    }
-
-    private String buildQueryFilter() {
-        String sql = "SELECT DISTINCT b.* FROM building b ";
-        return sql;
+        return sql.toString();
     }
 }
