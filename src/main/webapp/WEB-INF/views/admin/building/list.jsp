@@ -240,7 +240,7 @@
 											 <display:column headerClass="text-center" property="brokerageFee" title="Phí môi giới"/>
 											 <display:column headerClass="col-actions" title="Thao tác">
 											    <div class="hidden-sm hidden-xs btn-group">
-															<button class="btn btn-xs btn-success" title="Giao tòa nhà" onclick="assignmentBuilding(${tableList.id})">
+															<button class="btn btn-xs btn-success" title="Giao tòa nhà"  type="button" onclick="assignmentBuilding(${tableList.id})">
 																<i class="ace-icon glyphicon glyphicon-list"></i>
 															</button>
 
@@ -380,7 +380,7 @@
             								<input type="hidden" id="buildingId" value=""/>
                     </div>
                     <div class="modal-footer">
-            			<button type="button" class="btn btn-default" id="assignBuilding">Giao nhân viên</button>
+            			<button type="button" class="btn btn-default" id="assignBuildingStaff">Giao nhân viên</button>
                       <button type="button" class="btn btn-default" onclick= "closeButton()" >Close</button>
                     </div>
                   </div>
@@ -396,7 +396,7 @@
 
 
         }
-        $('#assignBuilding').click(function(e){
+        $('#assignBuildingStaff').click(function(e){
 				e.preventDefault();
 				var data = {};
 				data['buildingId'] = $('#buildingId').val();
@@ -413,7 +413,7 @@
 						contentType: "application/json",
 				 		success: function(respond){
 							console.log("thanh cong!");
-							window.location.href = "/admin/building-list"
+                            window.location.href = "/admin/building-list"
 					},
 						error: function(respond){
 							console.log("Lỗi rồi!");
@@ -449,30 +449,6 @@
             e.preventDefault();
             $('#listForm').submit();
 
-			<%--let params = $('listForm').serialize()--%>
-
-			<%--$.ajax({--%>
-			<%--	type: "Get",--%>
-			<%--			url: "${buildingAPI}/search?" + params,--%>
-			<%--			// data: param ,--%>
-			<%--			contentType: "application/json",--%>
-			<%--	 		success: function(respond){--%>
-			<%--				var row = '';--%>
-			<%--					$respond.forEach(function(item){--%>
-			<%--						row += '<tr>' +--%>
-			<%--						 '';--%>
-
-
-			<%--					});--%>
-			<%--					$('#tableList tbody').html(row)--%>
-			<%--				console.log("thanh cong!");--%>
-
-			<%--				&lt;%&ndash;window.location.href = "<c:url value="/admin/building-list"/>";&ndash;%&gt;--%>
-			<%--		},--%>
-			<%--			error: function(respond){--%>
-			<%--				console.log("Lỗi rồi!");--%>
-			<%--			}--%>
-			<%--			});--%>
         });
 
 

@@ -27,6 +27,7 @@ public class RentAreaService implements IRentAreaService {
     @Override
     public void addRentArea(BuildingDTO buildingDTO) {
         BuildingEntity entity = buildingRepo.findById(buildingDTO.getId()).get();
+//        BuildingEntity entity = buildingRepo.findById(buildingId).get();
         rentAreaRepo.deleteByBuilding(entity);
 
         String[] rentAreas = buildingDTO.getRentArea().split(",");

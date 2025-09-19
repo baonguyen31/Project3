@@ -76,6 +76,7 @@ public class BuildingService implements IBuildingService {
         BuildingEntity buildingEntity = modelMapper.map(dto, BuildingEntity.class);
         buildingEntity.setTypeCode(removeAccent(dto.getTypeCode()));
         buildingRepo.save(buildingEntity);
+        dto.setId(buildingEntity.getId());
         if(StringUtils.check(dto.getRentArea())) rentAreaService.addRentArea(dto);
         return dto;
     }
