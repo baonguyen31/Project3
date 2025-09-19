@@ -3,7 +3,6 @@ package com.javaweb.service.impl;
 import com.javaweb.builder.BuildingSearchBuilder;
 import com.javaweb.converter.BuildingConverter;
 import com.javaweb.converter.BuildingSearchBuilderConverter;
-import com.javaweb.entity.AssignmentBuildingEntity;
 import com.javaweb.entity.BuildingEntity;
 import com.javaweb.entity.UserEntity;
 import com.javaweb.model.dto.BuildingDTO;
@@ -12,7 +11,6 @@ import com.javaweb.model.request.BuildingSearchRequest;
 import com.javaweb.model.response.BuildingSearchResponse;
 import com.javaweb.model.response.ResponseDTO;
 import com.javaweb.model.response.StaffResponseDTO;
-import com.javaweb.repository.AssingmentBuildingRepository;
 import com.javaweb.repository.BuildingRepository;
 import com.javaweb.repository.UserRepository;
 import com.javaweb.repository.custom.impl.BuildingRepositoryImpl;
@@ -47,8 +45,6 @@ public class BuildingService implements IBuildingService {
     @Autowired
     private UserRepository userRepo;
 
-    @Autowired
-    private AssignmentBuildingService assignmentBuildingService;
     @Autowired
     private BuildingSearchBuilderConverter buildingSearchBuilderConverter;
 
@@ -115,8 +111,8 @@ public class BuildingService implements IBuildingService {
     @Override
     @Transactional
     public void deleteByBuidling(List<Long> Id) {
-        rentAreaService.deleteByBuildingIdIn(Id);
-        assignmentBuildingService.deleteByBuildingIds(Id);
+//        rentAreaService.deleteByBuildingIdIn(Id);
+//        assignmentBuildingService.deleteByBuildingIds(Id);
         buildingRepo.deleteByIdIn(Id);
     }
 
@@ -140,8 +136,9 @@ public class BuildingService implements IBuildingService {
     public ResponseDTO listStaffs(Long buildingId) {
         BuildingEntity building = buildingRepo.findById(buildingId).get();
         List<UserEntity> getStaff = userRepo.findByStatusAndRoles_Code(1, "STAFF");
-        List<AssignmentBuildingEntity> findStaff = building.getAssignBuidling();
-        List<UserEntity> staff = findStaff.stream().map(AssignmentBuildingEntity::getStaff).collect(Collectors.toList());
+//        List<AssignmentBuildingEntity> findStaff = building.getAssignBuidling();
+        List<UserEntity> staff = building.getUserEntities();
+//        List<UserEntity> staff = findStaff.stream().map(BuildingEntity::getStaff).collect(Collectors.toList());
         List<StaffResponseDTO> responseDTOs = new ArrayList<>();
         ResponseDTO responseDTO = new ResponseDTO();
         for (UserEntity it : getStaff) {

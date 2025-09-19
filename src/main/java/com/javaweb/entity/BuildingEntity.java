@@ -67,18 +67,21 @@ public class BuildingEntity extends BaseEntity {
         this.rentPriceDescription = rentPriceDescription;
     }
 
-    @OneToMany(mappedBy = "building", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "building", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<RentAreaEntity> rentArea = new ArrayList<>();
 
-    @OneToMany(mappedBy = "building", fetch = FetchType.EAGER)
-    private List<AssignmentBuildingEntity> assignBuidling = new ArrayList<>();
+    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JoinTable(name= "assignmentbuilding",
+            joinColumns= @JoinColumn(name="buildingid", nullable = false),
+            inverseJoinColumns = @JoinColumn(name ="staffid", nullable = false))
+    private List<UserEntity> userEntities = new ArrayList<>();
 
-    public List<AssignmentBuildingEntity> getAssignBuidling() {
-        return assignBuidling;
+    public List<UserEntity> getUserEntities() {
+        return userEntities;
     }
 
-    public void setAssignBuidling(List<AssignmentBuildingEntity> assignBuidling) {
-        this.assignBuidling = assignBuidling;
+    public void setUserEntities(List<UserEntity> userEntities) {
+        this.userEntities = userEntities;
     }
 
     public List<RentAreaEntity> getRentArea() {
