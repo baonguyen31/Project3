@@ -2,7 +2,7 @@
 //
 //import com.javaweb.converter.BuildingConverter;
 //import com.javaweb.converter.UserConverter;
-////import com.javaweb.entity.AssignmentBuildingEntity;
+//import com.javaweb.entity.AssignmentBuildingEntity;
 //import com.javaweb.entity.BuildingEntity;
 //import com.javaweb.entity.UserEntity;
 //import com.javaweb.repository.AssingmentBuildingRepository;
@@ -39,7 +39,7 @@
 //    public void assignStafftoBuilding(Long buildingId, List<Long> staffId) {
 //        BuildingEntity buildingEntity = buildingRepository.findById(buildingId).get();
 ////        BuildingDTO building = buildingConverter.ToDto(buildingEntity);
-//        assingmentBuildingRepository.deleteByBuilding(buildingId);
+//        assingmentBuildingRepository.deleteAssignmentBuildingEntityByBuilding_Id(buildingId);
 //        for(Long id : staffId) {
 //            UserEntity userEntity = userRepository.findOneById(id);
 //            AssignmentBuildingEntity assign = new AssignmentBuildingEntity();

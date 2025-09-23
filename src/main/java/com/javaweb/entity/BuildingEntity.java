@@ -7,6 +7,7 @@ import java.util.List;
 @Entity
 @Table(name = "building")
 public class BuildingEntity extends BaseEntity {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -67,21 +68,24 @@ public class BuildingEntity extends BaseEntity {
         this.rentPriceDescription = rentPriceDescription;
     }
 
-    @OneToMany(mappedBy = "building", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "building", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     private List<RentAreaEntity> rentArea = new ArrayList<>();
 
-    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    @JoinTable(name= "assignmentbuilding",
-            joinColumns= @JoinColumn(name="buildingid", nullable = false),
-            inverseJoinColumns = @JoinColumn(name ="staffid", nullable = false))
-    private List<UserEntity> userEntities = new ArrayList<>();
+//    @OneToMany(mappedBy = "building", fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
+//    private List<AssignmentBuildingEntity> assignBuidling = new ArrayList<>();
 
-    public List<UserEntity> getUserEntities() {
-        return userEntities;
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(name = "assignmentbuilding",
+                joinColumns = @JoinColumn(name = "buildingid", nullable = false),
+                inverseJoinColumns = @JoinColumn(name = "staffid", nullable = false))
+    List<UserEntity> users = new ArrayList<>();
+
+    public List<UserEntity> getUsers() {
+        return users;
     }
 
-    public void setUserEntities(List<UserEntity> userEntities) {
-        this.userEntities = userEntities;
+    public void setUsers(List<UserEntity> users) {
+        this.users = users;
     }
 
     public List<RentAreaEntity> getRentArea() {

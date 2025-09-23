@@ -15,7 +15,7 @@ import com.javaweb.repository.BuildingRepository;
 import com.javaweb.repository.UserRepository;
 import com.javaweb.repository.custom.impl.BuildingRepositoryImpl;
 import com.javaweb.repository.rentAreaRepository;
-import com.javaweb.service.AssignmentBuildingService;
+//import com.javaweb.service.AssignmentBuildingService;
 import com.javaweb.service.IBuildingService;
 import com.javaweb.utils.StringUtils;
 import org.apache.tomcat.util.codec.binary.Base64;
@@ -69,10 +69,10 @@ public class BuildingService implements IBuildingService {
     @Transactional
     public BuildingDTO addAndUpdate(BuildingDTO dto) {
         Long id = dto.getId();
-        BuildingEntity buildingEntity = modelMapper.map(dto, BuildingEntity.class);
-        buildingEntity.setTypeCode(removeAccent(dto.getTypeCode()));
+        BuildingEntity buildingEntity = buildingConverter.convertToEntity(dto);
+//        buildingEntity.setTypeCode(removeAccent(dto.getTypeCode()));
         buildingRepo.save(buildingEntity);
-        if(StringUtils.check(dto.getRentArea())) rentAreaService.addRentArea(dto);
+//        if(StringUtils.check(dto.getRentArea())) rentAreaService.addRentArea(dto);
         return dto;
     }
 
@@ -90,6 +90,7 @@ public class BuildingService implements IBuildingService {
 //            buildingEntity.setImage(path);
 //        }
 //    }
+
 
 
     @Override
@@ -137,8 +138,8 @@ public class BuildingService implements IBuildingService {
         BuildingEntity building = buildingRepo.findById(buildingId).get();
         List<UserEntity> getStaff = userRepo.findByStatusAndRoles_Code(1, "STAFF");
 //        List<AssignmentBuildingEntity> findStaff = building.getAssignBuidling();
-        List<UserEntity> staff = building.getUserEntities();
-//        List<UserEntity> staff = findStaff.stream().map(BuildingEntity::getStaff).collect(Collectors.toList());
+        List<UserEntity> staff = building.getUsers();
+//        List<UserEntity> staff = findStaff.stream().map(AssignmentBuildingEntity::getStaff).collect(Collectors.toList());
         List<StaffResponseDTO> responseDTOs = new ArrayList<>();
         ResponseDTO responseDTO = new ResponseDTO();
         for (UserEntity it : getStaff) {
@@ -154,6 +155,18 @@ public class BuildingService implements IBuildingService {
         }
         responseDTO.setData(responseDTOs);
         return responseDTO;
+    }
+
+    public void assignmentStafftoBuiling(Long buildingId, List<Long> staffid) {
+        BuildingEntity building = buildingRepo.findById(buildingId).get();
+        building.getUsers().clear();
+
+        for(Long it : staffid) {
+            UserEntity user = userRepo.findById(it).get();
+            building.getUsers().add(user);
+
+        }
+        buildingRepo.save(building);
     }
 
     public String removeAccent(List<String> typeCodes) {

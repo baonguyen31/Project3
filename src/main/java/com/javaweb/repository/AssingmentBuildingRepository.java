@@ -1,6 +1,6 @@
 //package com.javaweb.repository;
 //
-////import com.javaweb.entity.AssignmentBuildingEntity;
+//import com.javaweb.entity.AssignmentBuildingEntity;
 //import com.javaweb.entity.BuildingEntity;
 //import org.springframework.data.jpa.repository.JpaRepository;
 //
@@ -8,5 +8,6 @@
 //
 //public interface AssingmentBuildingRepository extends JpaRepository<AssignmentBuildingEntity, Long> {
 //    void deleteByBuildingIdIn(List<Long> ids);
-//    void deleteByBuilding(Long id);
+//
+//    void deleteAssignmentBuildingEntityByBuilding_Id(Long buildingId);
 //}

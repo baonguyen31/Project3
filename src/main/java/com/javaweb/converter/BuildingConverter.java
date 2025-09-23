@@ -7,6 +7,7 @@ import com.javaweb.enums.district;
 import com.javaweb.model.dto.BuildingDTO;
 import com.javaweb.model.dto.UserDTO;
 import com.javaweb.model.response.BuildingSearchResponse;
+import com.javaweb.repository.BuildingRepository;
 import com.javaweb.repository.rentAreaRepository;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,6 +27,9 @@ public class BuildingConverter {
 
     @Autowired
     private rentAreaRepository rentAreaRepository;
+
+    @Autowired
+    private RentAreaConverter rentAreaConverter;
 
 
     public BuildingSearchResponse convertToDto (BuildingEntity entity){
@@ -54,32 +58,12 @@ public class BuildingConverter {
         return result;
     }
 
-    public BuildingEntity convertToEntity (BuildingDTO dto){
+    public BuildingEntity convertToEntity(BuildingDTO dto){
         BuildingEntity result = modelMapper.map(dto, BuildingEntity.class);
-        List<String> typeCodes = new ArrayList<>();
-        result.setTypeCode(dto.getTypeCode().stream().map(typeCode -> typeCode.toString()).collect(Collectors.joining(",")));
-        if (dto.getRentArea() != null && !dto.getRentArea().isEmpty()) {
-            List<RentAreaEntity> rentAreas = Arrays.stream(dto.getRentArea().split(","))
-                    .map(String::trim)
-                    .filter(s -> !s.isEmpty())
-                    .map(Long::valueOf) // ép về số
-                    .map(value -> {
-                        RentAreaEntity rentArea = new RentAreaEntity();
-                        rentArea.setValue(value);
-                        rentArea.setBuilding(result);// gắn quan hệ
-                        return rentArea;
-                    })
-                    .collect(Collectors.toList());
-
-            result.setRentArea(rentAreas);
-        }
-
+        result.setTypeCode(removeAccent(dto.getTypeCode()));
+        result.setRentArea(rentAreaConverter.convertToEntity(dto, result));
         return result;
-    }
+ }
+    public static String removeAccent(List<String> typeCodes) { return String.join(",", typeCodes); }
 
-
-//    public UserEntity convertToEntity (UserDTO dto){
-//        UserEntity result = modelMapper.map(dto, UserEntity.class);
-//        return result;
-//    }
 }

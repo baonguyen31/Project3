@@ -240,15 +240,15 @@
 											 <display:column headerClass="text-center" property="brokerageFee" title="Phí môi giới"/>
 											 <display:column headerClass="col-actions" title="Thao tác">
 											    <div class="hidden-sm hidden-xs btn-group">
-															<button class="btn btn-xs btn-success" title="Giao tòa nhà" onclick="assignmentBuilding(${tableList.id})">
+															<button class="btn btn-xs btn-success" title="Giao tòa nhà" type="button" onclick="assignmentBuilding(${tableList.id})">
 																<i class="ace-icon glyphicon glyphicon-list"></i>
 															</button>
 
-															<a class="btn btn-xs btn-info" title="Sửa tòa nhà" href="${buildingEditURL}-${tableList.id}">
+															<a class="btn btn-xs btn-info" title="Sửa tòa nhà" type="button"  href="${buildingEditURL}-${tableList.id}">
 																<i class="ace-icon fa fa-pencil bigger-120"></i>
 															</a>
 
-															<button class="btn btn-xs btn-danger" title="Xóa tòa nhà" onclick="deleteBuilding(${tableList.id})">
+															<button class="btn btn-xs btn-danger" title="Xóa tòa nhà" type="button"  onclick="deleteBuilding(${tableList.id})">
 																<i class="ace-icon fa fa-trash-o bigger-120"></i>
 															</button>
                                                         </div>
@@ -449,30 +449,6 @@
             e.preventDefault();
             $('#listForm').submit();
 
-			<%--let params = $('listForm').serialize()--%>
-
-			<%--$.ajax({--%>
-			<%--	type: "Get",--%>
-			<%--			url: "${buildingAPI}/search?" + params,--%>
-			<%--			// data: param ,--%>
-			<%--			contentType: "application/json",--%>
-			<%--	 		success: function(respond){--%>
-			<%--				var row = '';--%>
-			<%--					$respond.forEach(function(item){--%>
-			<%--						row += '<tr>' +--%>
-			<%--						 '';--%>
-
-
-			<%--					});--%>
-			<%--					$('#tableList tbody').html(row)--%>
-			<%--				console.log("thanh cong!");--%>
-
-			<%--				&lt;%&ndash;window.location.href = "<c:url value="/admin/building-list"/>";&ndash;%&gt;--%>
-			<%--		},--%>
-			<%--			error: function(respond){--%>
-			<%--				console.log("Lỗi rồi!");--%>
-			<%--			}--%>
-			<%--			});--%>
         });
 
 

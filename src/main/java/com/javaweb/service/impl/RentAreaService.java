@@ -32,7 +32,7 @@ public class RentAreaService implements IRentAreaService {
         String[] rentAreas = buildingDTO.getRentArea().split(",");
 
         for (String rentArea : rentAreas) {
-            RentAreaEntity rentAreaEntity = rentAreaConverter.convertToEntity(buildingDTO, Long.parseLong(rentArea));
+            RentAreaEntity rentAreaEntity = rentAreaConverter.convertToEntity(entity, Long.parseLong(rentArea));
             rentAreaRepo.save(rentAreaEntity);
         }
     }

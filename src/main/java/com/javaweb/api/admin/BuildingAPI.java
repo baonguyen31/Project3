@@ -7,7 +7,7 @@ import com.javaweb.model.request.BuildingSearchRequest;
 import com.javaweb.model.response.BuildingSearchResponse;
 import com.javaweb.model.response.ResponseDTO;
 import com.javaweb.repository.BuildingRepository;
-import com.javaweb.service.AssignmentBuildingService;
+//import com.javaweb.service.AssignmentBuildingService;
 import com.javaweb.service.impl.BuildingService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -25,8 +25,8 @@ public class BuildingAPI {
     @Autowired
     private BuildingService buildingService;
 
-    @Autowired
-    private AssignmentBuildingService assignmentBuildingService;
+//    @Autowired
+//    private AssignmentBuildingService assignmentBuildingService;
     @Autowired
     private BuildingRepository buildingRepository;
 
@@ -54,8 +54,9 @@ public class BuildingAPI {
     }
     @PostMapping("/{buildingId}/staffs")
     public void addStaff(@PathVariable Long buildingId,
-                                @RequestBody List<Long> staffIds){
-        assignmentBuildingService.assignStafftoBuilding(buildingId, staffIds);
+                         @RequestBody List<Long> staffIds){
+//        assignmentBuildingService.assignStafftoBuilding(buildingId, staffIds);
+        buildingService.assignmentStafftoBuiling(buildingId, staffIds);
     }
 
 }
